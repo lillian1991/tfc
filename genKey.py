@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-from curses.ascii import isprint
 import subprocess
 import binascii
 import string
-import zlib
 import sys
 import os
 
@@ -41,9 +39,9 @@ mixedEntropy        = False
 #Settings
 EntAnalyze          = True      # Use Ent analysis tool to calculate entropy of file.
 
-Dieharder           = False     # Use Dieharder suite (diehard battery of tests and 
+Dieharder           = False     # Use Dieharder suite (diehard battery of tests and
                                 # NIST statistical test suite) to measure quality of keyfile.
-                                # Warning: This procedure is extremely slow with Raspberry Pi.
+                                # This procedure is extremely slow with Raspberry Pi.
 
 UseDevRandom        = False     # Higher quality entropy, interruptable: can significantly slow down generation of KF.
 
@@ -71,10 +69,10 @@ except IndexError:
 
 if (command == '-k'):
     kernelEntropy   = True
-    
+
 if (command == '-h'):
     HWRNGEntropy    = True
-    
+
 if (command == '-b'):
     mixedEntropy    = True
 
@@ -82,8 +80,6 @@ if (command != '-k') and (command != '-h') and (command != '-b'):
     showHelp()
 
 os.chdir(sys.path[0])
-
-#os.system('clear')
 
 if kernelEntropy:
 
@@ -121,7 +117,7 @@ if (HWRNGEntropy or mixedEntropy):
     #########################################################
     #                       DESKEWING                       #
     #########################################################
-    
+
     print '\nDebiasing HW RNG sampled entropy...'
     subprocess.Popen('cat ' + 'HWRNGEntropy' + ' | ./deskew > ' + 'deskewed', shell=True).wait()
 
@@ -131,8 +127,8 @@ if (HWRNGEntropy or mixedEntropy):
     #                    CONVERT TO 8-BIT                   #
     #########################################################
 
-    f               = open('deskewed', 'r')
-    binaryInput     = f.readline()
+    with open('deskewed', 'r') as file:
+        binaryInput = file.readline()
 
     print '\nConverting binary data to 8-bit...'
     BinaryEntropy   = ''.join(chr(int(binaryInput[i:i+8], 2)) for i in xrange(0, len(binaryInput), 8))
@@ -146,9 +142,8 @@ if HWRNGEntropy:
     #########################################################
 
     print '\nWriting binary data to temp file...'
-    file = open(os.path.join(outputFile), 'wb')
-    file.write(BinaryEntropy)
-    file.close()
+    with  open(os.path.join(outputFile), 'wb') as file:
+        file.write(BinaryEntropy)
 
 
 
@@ -159,9 +154,8 @@ if mixedEntropy:
     #########################################################
 
     print 'Writing binary data to tmp file...'
-    file = open(os.path.join('HWRNGOut'), 'wb')
-    file.write(BinaryEntropy)
-    file.close()
+    with open(os.path.join('HWRNGOut'), 'wb') as file:
+        file.write(BinaryEntropy)
 
     print '\nQuality of HW RNG sampled file is'
     subprocess.Popen('ent HWRNGOut | grep \'Entropy =\' ', shell=True).wait()
@@ -176,8 +170,7 @@ if mixedEntropy:
     with open('HWRNGOut', 'rb+') as file:
         file.seek(0,2)
         sizeInBytes = file.tell()
-        print 'Size of sampled RNG entropy file: ' + str(sizeInBytes) + ' bytes'
-        file.close()
+    print 'Size of sampled RNG entropy file: ' + str(sizeInBytes) + ' bytes'
 
 
 
@@ -200,8 +193,7 @@ if mixedEntropy:
     with open('kernelOut', 'rb+') as file:
         file.seek(0,2)
         secondSizeBytes = file.tell()
-        file.close()
-            
+
     if (secondSizeBytes == sizeInBytes):
         pass
     else:
@@ -213,18 +205,16 @@ if mixedEntropy:
     #########################################################
     #                 XOR KERNEL + HW RNG                   #
     #########################################################
-    
-    print '\nXORing Kernel and HW RNG entropy...'
-    
-    #read kernel entropy
-    file = open('kernelOut', 'rb+')
-    kernelEntropyBytes = file.read(sizeInBytes)
-    file.close()
 
-    #read HWRNG entropy 
-    file = open('HWRNGOut', 'rb+')
-    HWRNGEntropyBytes = file.read(sizeInBytes)
-    file.close()
+    print '\nXORing Kernel and HW RNG entropy...'
+
+    #read kernel entropy
+    with open('kernelOut', 'rb+') as file:
+        kernelEntropyBytes = file.read(sizeInBytes)
+
+    #read HWRNG entropy
+    with open('HWRNGOut', 'rb+') as file:
+        HWRNGEntropyBytes = file.read(sizeInBytes)
 
     #XOR entropy together
     xorred = ''.join(chr(ord(HWRNGByte) ^ ord(KernelByte)) for HWRNGByte, KernelByte in zip(kernelEntropyBytes, HWRNGEntropyBytes))
@@ -236,8 +226,8 @@ if mixedEntropy:
     #########################################################
 
     print 'Writing out final XORred keyfile...'
-    file = open(outputFile, 'wb')
-    file.write(xorred)
+    with open(outputFile, 'wb') as file:
+        file.write(xorred)
 
 
 
@@ -269,15 +259,14 @@ if Dieharder:
     with open(outputFile, 'rb+') as file:
         file.seek(0,2)
         finalSize = file.tell()
-        file.close()
+
     if (finalSize < 12000000):
         print '\n\nWarning: Dieharder is meant to be used with files larger than 12MB! Results may not be accurate.\n'
     print '\n\nInitializing Dieharder battery of tests to evaluate quality of final keyfile'
     subprocess.Popen('dieharder -a -f ' + outputFile, shell=True).wait()
 
 
-print '\nKeyfile generation successful\nExiting genKey.py\n' 
-
+print '\nKeyfile generation successful\nExiting genKey.py\n'
 exit()
 
 
