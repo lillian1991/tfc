@@ -52,7 +52,7 @@ debugging          = False
 emergencyExit      = False
 checkKeyHashes     = False
 randomSleep        = False
-localTesting       = True
+localTesting       = False
 
 
 if not localTesting:

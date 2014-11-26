@@ -56,7 +56,7 @@ shredIterations    = 3
 keyThreshold       = 5
 PkgSize            = 140
 
-localTesting       = True
+localTesting       = False
 
 
 if not localTesting:
