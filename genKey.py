@@ -49,6 +49,7 @@ Dieharder       = False     # Use Dieharder suite (diehard battery of tests and
                             # NIST statistical test suite) to measure quality of keyfile.
                             # This procedure is extremely slow with Raspberry Pi.
 
+createCopies    = False     # Create copies of key for your and recipient's RxM.
 
 ######################################################################
 #                              ARGUMENTS                             #
@@ -736,9 +737,10 @@ if Dieharder:
 #               MAKE COPIES OF KEYFILE                  #
 #########################################################
 
-print '\nCreating copies of key...'
-#subprocess.Popen('cp ' + outputFile + ' me.' + outputFile, shell=True).wait()
-#subprocess.Popen('cp ' + outputFile + ' rx.' + outputFile + '_for_recipient', shell=True).wait()
+if createCopies:
+    print '\nCreating copies of key...'
+    subprocess.Popen('cp ' + outputFile + ' me.' + outputFile, shell=True).wait()
+    subprocess.Popen('cp ' + outputFile + ' rx.' + outputFile + '_for_recipient', shell=True).wait()
 
 
 print 'Done.\n\nKeyfile generation successful.\nExiting.\n\n'
