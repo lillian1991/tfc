@@ -52,7 +52,8 @@ debugging          = False
 emergencyExit      = False
 checkKeyHashes     = False
 randomSleep        = False
-localTesting       = False
+localTesting       = True
+
 
 if not localTesting:
     port        = serial.Serial('/dev/ttyAMA0', baudrate=9600, timeout=0.1)
@@ -601,21 +602,16 @@ def encrypt(xmpp, pt):
 
 def new_keyfile():
 
-    print 'Shredding keyfile that encrypts messages to ' + contactXmpp[3:]
-    subprocess.Popen('shred -n ' + str(shredIterations) + ' -z -u ' + contactXmpp + '.e', shell=True).wait()
+    print 'Shredding keyfile that encrypts messages to ' + contactXmpp
+    subprocess.Popen('shred -n ' + str(shredIterations) + ' -z -u ' + 'tx.' + contactXmpp + '.e', shell=True).wait()
 
-    print 'TxM: Replacing the keyfile for ' + contactXmpp[3:] + ' with \'' + keyFileName + '\''
-    subprocess.Popen('mv ' + keyFileName + ' ' + contactXmpp + '.e', shell=True).wait()
+    print 'TxM: Replacing the keyfile for ' + contactXmpp + ' with \'' + keyFileName + '\''
+    subprocess.Popen('mv ' + keyFileName + ' ' + 'tx.' + contactXmpp + '.e', shell=True).wait()
 
-    print 'TxM: Setting key number to 1 for ' + contactXmpp[3:]
-    write_keyID(contactXmpp, 1)
-
-    if contactXmpp == xmpp:
-        msgKeyID = 1
+    print 'TxM: Setting key number to 1 for ' + contactXmpp
+    write_keyID('tx.' + contactXmpp, 1)
 
     print 'TxM: Keyfile successfully changed\n'
-
-    return msgKeyID
 
 
 
@@ -2039,7 +2035,6 @@ while True:
                           'on TxM and me.' + contactXmpp + '.e on RxM!\n'
 
                     if raw_input('\nAre you sure? Type uppercase \'YES\' to continue: ' ) == 'YES':
-                        cmdNewTxKF = True
                         command     = 'tfckf me.' + contactXmpp + ' me.' + keyFileName
                         print '\nTxM > RxM: Shred keyfile me.' + contactXmpp + '.e and start using \'me.' + keyFileName + '\''
 
@@ -2047,6 +2042,7 @@ while True:
                         os.system('clear')
                         print '\nKeyfile change aborted.\n'
                         continue
+
 
                 # Process rx.xmpp.e keyfile.
                 if cmdtype == 'rx':
@@ -2073,8 +2069,11 @@ while True:
         ########################
 
         cmd_msg_process(command)
-        continue
 
+        if command.startswith('tfckf me'):
+            new_keyfile()
+
+        continue
 
     #############################
     #     FILE TRANSMISSION     #
@@ -2115,6 +2114,8 @@ while True:
             print '\nFile sending aborted\n'
             time.sleep(0.4)
             continue
+
+        
 
     if userInput.startswith('/') and not userInput.startswith('/file '):
         os.system('clear')

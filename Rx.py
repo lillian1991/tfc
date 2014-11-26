@@ -56,7 +56,8 @@ shredIterations    = 3
 keyThreshold       = 5
 PkgSize            = 140
 
-localTesting       = False
+localTesting       = True
+
 
 if not localTesting:
     port        = serial.Serial('/dev/ttyAMA0', baudrate=9600, timeout=0.1)
@@ -780,7 +781,7 @@ try:
                                 #     Load new keyfile     #
                                 ############################
                                 if command.startswith('tfckf '):
-                                    notUsed, cXMPP, newKf = decryptedMsg.split(' ')
+                                    notUsed, cXMPP, newKf = command.split(' ')
 
                                     # Shred entropy file
                                     if cXMPP.startswith('me.'):
