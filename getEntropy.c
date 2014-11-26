@@ -17,14 +17,18 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Compile: gcc -Wall -O getEntropy.c -o getEntropy
  */
 
-// Compile: gcc -Wall -O getEntropy.c -o getEntropy
+/* This version (getEntropy.c) is modified from avalanche_hour.c
+ * by Giorgio Vazzana to be used in TFC suite: github.com/maqp/tfc/
 
-// README!
-// This version (getEntropy.c) is modified from avalanche_hour.c by Giorgio Vazzana to be used in TFC suite: github.com/maqp/tfc/
-// This version uses shorter sleep time between recording samples.
-// Original program code is available from http://holdenc.altervista.org/avalanche/downloads/avalanche-test-utils.tgz
+ * This version uses faster sampling speed..
+
+ * Original source code is available at
+ * http://holdenc.altervista.org/avalanche/downloads/avalanche-test-utils.tgz
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,14 +75,14 @@ void signal_handler(int sig)
 
 void setup_io()
 {
-	/* open /dev/mem */
+	// open /dev/mem
 	mem_fd = open("/dev/mem", O_RDWR|O_SYNC);
 	if (mem_fd == -1) {
 		perror("Cannot open /dev/mem");
 		exit(1);
 	}
 
-	/* mmap GPIO */
+	// mmap GPIO
 	gpio_map = mmap(NULL, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, mem_fd, GPIO_BASE);
 	if (gpio_map == MAP_FAILED) {
 		perror("mmap() failed");
@@ -92,7 +96,6 @@ void setup_io()
 	GPIO_IN(AVALANCHE_IN); // must use GPIO_IN before we can use GPIO_OUT
 
 	GPIO_IN(LED);
-//	GPIO_OUT(LED);
 }
 
 // Release GPIO memory region
@@ -101,14 +104,14 @@ void close_io()
 {
 	int ret;
 
-	/* munmap GPIO */
+	// munmap GPIO
 	ret = munmap(gpio_map, BLOCK_SIZE);
 	if (ret == -1) {
 		perror("munmap() failed");
 		exit(1);
 	}
 
-	/* close /dev/mem */
+	// close /dev/mem
 	ret = close(mem_fd);
 	if (ret == -1) {
 		perror("Cannot close /dev/mem");
@@ -142,7 +145,7 @@ int main(int argc, char *argv[])
 
 			bit = GPIO_LEV(AVALANCHE_IN);
 
-		//Useless iterating that only causes slight sleep time before next sample is read.
+		// Useless iterating that only causes slight sleep time before next sample is read.
 		for (iterate = 0; iterate < 1000; iterate++) {
 			increasethis++;
 			}
@@ -163,3 +166,4 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+

@@ -1,29 +1,34 @@
 #!/usr/bin/env python
+#-*- coding: utf-8 -*-
 
-import sys
-import subprocess
 import os
+import subprocess
 import time
+
+
 
 ######################################################################
 #                             LICENCE                                #
 ######################################################################
 
-# This software is part of the TFC application, which is free software:
-# You can redistribute it and/or modify it under the terms of the GNU
-# General Public License as published by the Free Software Foundation,
-# either version 3 of the License, or (at your option) any later version.
+# TFC (OTP Version) || tfcInstaller.py
+version = '0.4.12 beta'
 
-# TFC is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
-# for more details. For a copy of the GNU General Public License, see
-# <http://www.gnu.org/licenses/>.
+"""
+This software is part of the TFC application, which is free software:
+You can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
 
-# TFC
-# tfcInstaller.py
-version = '0.4.11 beta'
+TFC is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+for more details. For a copy of the GNU General Public License, see
+<http://www.gnu.org/licenses/>.
+"""
 
+# Specify global keyfile size in megabytes.
+megabytes = 2
 
 ######################################################################
 #                             APT COMMANDS                           #
@@ -112,31 +117,31 @@ def zypper_Python_Qt4():
 
 def yum_Pidgin():
     print '\nInstalling Pidgin\n'
-    subprocess.Popen('sudo yum install pidgin',        shell=True).wait()
+    subprocess.Popen('sudo yum install pidgin',     shell=True).wait()
 
 
 
 def yum_Pidgin_OTR():
     print '\nInstalling Pidgin OTR\n'
-    subprocess.Popen('sudo yum install pidgin-otr',    shell=True).wait()
+    subprocess.Popen('sudo yum install pidgin-otr', shell=True).wait()
 
 
 
 def yum_install_Wget():
     print '\nInstalling Wget\n'
-    subprocess.Popen('sudo yum install wget',    shell=True).wait()
+    subprocess.Popen('sudo yum install wget',       shell=True).wait()
 
 
 
 def yum_Python_Serial():
     print '\nInstalling Python-serial\n'
-    subprocess.Popen('sudo yum install pyserial', shell=True).wait()
+    subprocess.Popen('sudo yum install pyserial',   shell=True).wait()
 
 
 
 def yum_Python_Qt4():
     print '\nInstalling Python QT4\n'
-    subprocess.Popen('sudo yum install pyqt4',    shell=True).wait()
+    subprocess.Popen('sudo yum install pyqt4',      shell=True).wait()
 
 
 
@@ -145,53 +150,53 @@ def yum_Python_Qt4():
 ######################################################################
 
 def rasp_cmdline():
-    # Edit /boot/cmdline.txt to enable serial port for user (phase 1/2)
+    # Edit /boot/cmdline.txt to enable serial port for user (phase 1/2).
     print '\nEditing file \'cmdline.txt\'\n'
 
-    with open('/boot/cmdline.txt', 'r') as bootfile:
-        line        = bootfile.readline()
+    with open('/boot/cmdline.txt', 'r') as file:
+        line        = file.readline()
         line        = line.replace(' console=ttyAMA0,115200 kgdboc=ttyAMA0,115200', '')
-    with open('/boot/cmdline.txt', 'w+') as bootfile:
-        bootfile.write(line)
+    with open('/boot/cmdline.txt', 'w+') as file:
+        file.write(line)
 
 
 
 def rasp_inittab():
-    # Edit /etc/inittab to enable serial port for user (phase 2/2)
+    # Edit /etc/inittab to enable serial port for user (phase 2/2).
     print '\nEditing file \'inittab\'\n'
 
-    with open('/etc/inittab', 'r') as inittfile: 
-        contents    = inittfile.read()
-        rep_contents    = contents.replace('T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100', '#T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100')
+    with open('/etc/inittab', 'r') as file:
+        contents     = file.read()
+        rep_contents = contents.replace('T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100', '#T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100')
 
-    with open('/etc/inittab',"w+") as inittfile:
-        inittfile.write(rep_contents)
+    with open('/etc/inittab', 'w+') as file:
+        file.write(rep_contents)
 
 
 
-def x86_SerialConfig(scriptName):
-    # Configure serial port of Tx.py/Rx.py for USB adapters
+def serial_config(scriptName):
+    # Configure serial port of Tx.py/Rx.py for USB adapters.
     print '\nConfiguring serial interfaces of \'' + scriptName + '\'\n'
 
-    with open(scriptName, 'r') as scriptF:
-        contents    = scriptF.read()
-        fixedContent    = contents.replace('\'/dev/ttyAMA0\'', '\'/dev/ttyUSB0\'')
+    with open(scriptName, 'r') as file:
+        contents = file.read()
+        contents = contents.replace('\'/dev/ttyAMA0\'', '\'/dev/ttyUSB0\'')
 
-    with open(scriptName, 'w+') as scriptF:
-        scriptF.write(fixedContent)
+    with open(scriptName, 'w+') as file:
+        file.write(contents)
 
 
 
 def changeToLocal(fileName):
-    # Configure Tx/Rx/NH.py localTesting boolean to True
+    # Configure Tx/Rx/NH.py localTesting boolean to True.
     print '\nChanging boolean \'localTesting\' of file \'' + fileName + '\' to \'True\''
 
-    with open(fileName, 'r') as tfcApp:
-        contents    = tfcApp.read()
-        rep_contents    = contents.replace('localTesting    = False', 'localTesting    = True\n')
+    with open(fileName, 'r') as file:
+        contents = file.read()
+        contents = contents.replace('localTesting       = False', 'localTesting       = True\n')
 
-    with open(fileName, 'w+') as tfcApp:
-        tfcApp.write(rep_contents)
+    with open(fileName, 'w+') as file:
+        file.write(contents)
 
 
 
@@ -210,22 +215,22 @@ def get_TxM_scripts():
 
 def get_RxM_scripts():
     print '\nDownloading TFC-suite (RxM)\n'
-    subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/Rx.py', shell=True).wait()
+    subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/Rx.py',        shell=True).wait()
 
 
 
 def get_NH_script():
     print '\nDownloading TFC-suite (NH)\n'
-    subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/NH.py', shell=True).wait()
+    subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/NH.py',        shell=True).wait()
 
 
 
 ######################################################################
-#                             MISC COMMANDS                          #
+#                             MISC FUNCTIONS                         #
 ######################################################################
 
 def reboot():
-    subprocess.Popen('sudo reboot', shell=True).wait()
+    subprocess.Popen('sudo reboot',                                  shell=True).wait()
 
 
 
@@ -235,29 +240,30 @@ def SetSerialPermissions(username):
 
 
 
-def compile_C_programs():
+def compile_c_programs():
     print '\nCompiling C-programs\n'
     subprocess.Popen('sudo gcc -Wall -O getEntropy.c -o getEntropy', shell=True).wait()
     subprocess.Popen('sudo gcc -Wall -O deskew.c -o deskew',         shell=True).wait()
 
 
 
-def enable_C_execute():
+def c_run_permissions():
     print '\nEnabling permissions to execute compiled C-programs\n'
-    subprocess.Popen('sudo chmod a+x getEntropy', shell=True).wait()
-    subprocess.Popen('sudo chmod a+x deskew',     shell=True).wait()
+    subprocess.Popen('sudo chmod a+x getEntropy',                    shell=True).wait()
+    subprocess.Popen('sudo chmod a+x deskew',                        shell=True).wait()
 
 
 
 def printLocalTesterWarning():
-    print """
-WARNING YOU HAVE SELECTED TO INSTALL LOCAL TESTING VERSION OF TFC!
+    print '''
+WARNING YOU HAVE SELECTED THE LOCAL TESTING VERSION OF TFC!
 THIS VERSION IS INTENDED FOR TRYING OUT THE FEATURES AND STABILITY OF SYSTEM.
-AS ENCRYPTION KEYS ARE HANDLED ON SAME COMPUTER THAT IS CONNECTED ONLINE,
-ANYONE WHO BREAKS IN TO YOUR COMPUTER BY EXPLOITING A KNOWN OR UNKNOWN
-VULNERABILITY, CAN DECRYPT AND/OR FORGE ALL MESSAGES YOU SEND AND RECEIVE,
-EFFORTLESSLY!
-"""
+AS IN THIS CONFIGURATION, THE ENCRYPTION KEYS ARE CREATED, STORED AND HANDLED
+ON NETWORK-CONNECTED COMPUTER, ANYONE WHO BREAKS IN TO YOUR COMPUTER BY
+EXPLOITING A KNOWN OR UNKNOWN VULNERABILITY, CAN DECRYPT AND/OR FORGE ALL
+MESSAGES YOU SEND AND RECEIVE EFFORTLESSLY!
+'''
+
 
 
 ######################################################################
@@ -267,41 +273,41 @@ EFFORTLESSLY!
 while True:
     try:
         os.system('clear')
-        print 'TFC Installer (Version ' + version + ')\n'
-        print 'Select configuration that matches your OS:'
+        print 'TFC-CEV || ' + version + ' || tfcCEVinstaller.py'
+        print '''
+Select configuration that matches your OS:
 
+   TxM
+      1.  Raspbian (Run installer as superuser)
 
-        print '   TxM'
-        print '      1.  Raspbian\n'
+      2.  Ubuntu
+          Kubuntu
+          Linux Mint (Ubuntu/Debian)
 
-        print '      2.  Ubuntu'
-        print '          Kubuntu'
-        print '          Linux Mint (Ubuntu/Debian)\n'
+   RxM
+      3.  Raspbian (Run installer as superuser)
 
-        print '   RxM'
-        print '      3.  Raspbian\n'
+      4.  Ubuntu
+          Kubuntu
+          Linux Mint (Ubuntu/Debian)
 
-        print '      4.  Ubuntu'
-        print '          Kubuntu'
-        print '          Linux Mint (Ubuntu/Debian)\n'
+    NH
+      5.  Ubuntu
+          Kubuntu
+          Linux Mint (Ubuntu/Debian)
 
-        print '    NH'
-        print '      5.  Ubuntu'
-        print '          Kubuntu'
-        print '          Linux Mint (Ubuntu/Debian)\n'
+      6.  Tails
 
-        print '      6.  Tails\n'
-
-        print '      7.  OpenSUSE\n'
+      7.  OpenSUSE
         
-        print '      8.  Fedora\n'
+      8.  Fedora
 
-        print '    Local Testing (insecure)'
-        print '      9.  Ubuntu'
-        print '          Kubuntu'
-        print '          Linux Mint (Ubuntu/Debian).'
+    Local Testing (insecure)
+      9.  Ubuntu
+          Kubuntu
+          Linux Mint (Ubuntu/Debian).\n'''
 
-        selection = int(raw_input('\n1..9: '))
+        selection = int(raw_input('1..9: '))
 
 
 
@@ -309,56 +315,71 @@ while True:
     #                                  TxM                               #
     ######################################################################
 
-    #TxM Raspbian
-        if (selection == 1):
+        # TxM Raspbian
+        if selection == 1:
             os.system('clear')
-            if (raw_input('This will install TxM configuration for Raspbian. \nAre you sure? Type uppercase YES: ') == 'YES'):
-                rasp_cmdline()
-                rasp_inittab()
+            if raw_input('This will install TxM configuration for Raspbian. \nAre you sure? Type uppercase YES: ') == 'YES':
+
                 update_system()
-                install_Python_Serial()
                 install_SecureDelete()
+                get_TxM_scripts()
+
                 install_Ent()
                 install_DieHarder()
-                get_TxM_scripts()
-                compile_C_programs()
-                enable_C_execute()
+
+                compile_c_programs()
+                c_run_permissions()
+
+                install_Python_Serial()
+                rasp_cmdline()
+                rasp_inittab()
 
                 os.system('clear')
-                print '\nTxM install script completed\nRebooting system in 20 seconds. If you don\'t want to restart now, press CTRL+C'
+
+                print '\nTxM install script completed\n'                   \
+                      'Rebooting system in 20 seconds.\n'                  \
+                      'If you don\'t want to restart now, press CTRL+C\n\n'
                 try:
                     time.sleep(20)
                     reboot()
                 except KeyboardInterrupt:
-                    print "\n\nReboot aborted, exiting. (You may need to restart your TxM for Tx.py to work correctly)\n"
+                    print '\n\nReboot aborted, exiting. (You may need to ' \
+                          'restart Raspbian for Tx.py to work correctly)\n'
                     exit()
             else:
                 continue
 
 
 
-    #TxM Ubuntu
-        if (selection == 2):
+    # TxM Ubuntu
+        if selection == 2:
             os.system('clear')
-            if (raw_input('This will install TxM configuration for Ubuntu / Mint (Ubuntu / Debian). \nAre you sure? Type uppercase YES: ') == 'YES'):
+            if raw_input('This will install TxM configuration for Ubuntu / Mint (Ubuntu / Debian). \nAre you sure? Type uppercase YES: ') == 'YES':
+
                 update_system()
                 install_SecureDelete()
+                get_TxM_scripts()
+
                 install_Ent()
                 install_DieHarder()
+
+                compile_c_programs()
+                c_run_permissions()
+
                 install_Python_Serial()
-                get_TxM_scripts()
-                compile_C_programs()
-                enable_C_execute()
-                x86_SerialConfig('Tx.py')
-                SetSerialPermissions(raw_input("Type name of the user that will be running TFC (this will add the user to dialout group): "))
+                serial_config('Tx.py')
+                SetSerialPermissions(raw_input('Type name of the user that will be running TFC (this will add the user to dialout group): '))
 
                 os.system('clear')
-                print '\nTxM install script completed\nRebooting system in 20 seconds. If you don\'t want to restart now, press CTRL+C'
+                print '\nTxM install script completed\n'                   \
+                      'Rebooting system in 20 seconds.\n'                  \
+                      'If you don\'t want to restart now, press CTRL+C\n\n'
                 try:
                     time.sleep(20)
                     reboot()
                 except KeyboardInterrupt:
-                    print "\n\nReboot aborted, exiting. (You may need to restart your TxM for Tx.py to work correctly)\n"
+                    print '\n\nReboot aborted, exiting. (You may need to ' \
+                          'restart your OS for Tx.py to work correctly)\n'
                     exit()
             else:
                 continue
@@ -369,50 +390,61 @@ while True:
     #                                  RxM                               #
     ######################################################################
 
-    #RxM Raspbian
-        if (selection == 3):
+    # RxM Raspbian
+        if selection == 3:
             os.system('clear')
-            if (raw_input('This will install RxM configuration for Raspbian. \nAre you sure? Type uppercase YES: ') == 'YES'):
-                rasp_cmdline()
-                rasp_inittab()
+            if raw_input('This will install RxM configuration for Raspbian. \nAre you sure? Type uppercase YES: ') == 'YES':
+
                 update_system()
-                install_Python_Serial()
                 install_SecureDelete()
                 get_RxM_scripts()
 
+                install_Python_Serial()
+                rasp_cmdline()
+                rasp_inittab()
+
                 os.system('clear')
-                print '\nRxM install script completed\nRebooting system in 20 seconds. If you don\'t want to restart now, press CTRL+C'
+                print '\nRxM install script completed\n'                   \
+                      'Rebooting system in 20 seconds.\n'                  \
+                      'If you don\'t want to restart now, press CTRL+C\n\n'
+
                 try:
                     time.sleep(20)
                     reboot()
                 except KeyboardInterrupt:
-                    print "\n\nReboot aborted, exiting. (You may need to restart your RxM for Rx.py to work correctly)\n"
+                    print '\n\nReboot aborted, exiting. (You may need to ' \
+                          'restart Raspbian for Rx.py to work correctly)\n'
                     exit()
             else:
                 continue
 
 
 
-    #RxM Ubuntu
-        if (selection == 4):
+    # RxM Ubuntu
+        if selection == 4:
             os.system('clear')
-            if (raw_input('This will install RxM configuration for Ubuntu / Mint (Ubuntu / Debian). \nAre you sure? Type uppercase YES: ') == 'YES'):
+            if raw_input('This will install RxM configuration for Ubuntu / Mint (Ubuntu / Debian). \nAre you sure? Type uppercase YES: ') == 'YES':
+
                 update_system()
                 install_SecureDelete()
-                install_Python_Serial()
-                SetSerialPermissions(raw_input("Type name of the user that will be running TFC (this will add the user to dialout group): "))
-                
                 get_RxM_scripts()
-                x86_SerialConfig('Rx.py')
+
+                install_Python_Serial()
+                serial_config('Rx.py')
+                SetSerialPermissions(raw_input('Type name of the user that will be running TFC (this will add the user to dialout group): '))
+
 
                 os.system('clear')
-                print '\nRxM install script completed\nRebooting system in 20 seconds. If you don\'t want to restart now, press CTRL+C'
+                print '\nRxM install script completed\n'                   \
+                      'Rebooting system in 20 seconds.\n'                  \
+                      'If you don\'t want to restart now, press CTRL+C\n\n'
                 try:
                     time.sleep(20)
                     reboot()
                 except KeyboardInterrupt:
 
-                    print "\n\nReboot aborted, exiting. (You may need to restart your RxM for Rx.py to work correctly)\n"
+                    print '\n\nReboot aborted, exiting. (You may need to ' \
+                          'restart your OS for Rx.py to work correctly)\n'
                     exit()
             else:
                 continue
@@ -423,38 +455,47 @@ while True:
     #                                   NH                               #
     ######################################################################
 
-    #NH Ubuntu
-        if (selection == 5):
+    # NH Ubuntu
+        if selection == 5:
             os.system('clear')
-            if (raw_input('This will install NH configuration for Ubuntu / Mint (Ubuntu / Debian). \nAre you sure? Type uppercase YES: ') == 'YES'):
+            if raw_input('This will install NH configuration for Ubuntu / Mint (Ubuntu / Debian). \nAre you sure? Type uppercase YES: ') == 'YES':
+
                 update_system()
-                if (raw_input('\nType YES to install Pidgin with OTR: ') == 'YES'):
+
+                if raw_input('\nType YES to install Pidgin with OTR: ') == 'YES':
                     install_Pidgin()
                     install_Pidgin_OTR()
+
                 install_Python_Qt4()
                 install_Python_Serial()
-                SetSerialPermissions(raw_input("Type name of the user that will be running TFC (this will add the user to dialout group): "))
                 get_NH_script()
-                
+
+                SetSerialPermissions(raw_input('Type name of the user that will be running TFC (this will add the user to dialout group): '))
+
                 os.system('clear')
-                print '\nNH install script completed\nRebooting system in 20 seconds. If you don\'t want to restart now, press CTRL+C'
+                print '\nNH install script completed\n'  \
+                      'Rebooting system in 20 seconds.\n'\
+                      'If you don\'t want to restart now, press CTRL+C\n'
                 try:
                     time.sleep(20)
                     reboot()
                 except KeyboardInterrupt:
-                    print "\n\nReboot aborted, exiting. (You may need to restart your NH for NH.py to work correctly)\n"
+                    print '\n\nReboot aborted, exiting. (You may need to ' \
+                          'restart your NH for NH.py to work correctly)\n'
                     exit()
             else:
                 continue
 
 
 
-    #NH Tails (The Amnesic Incognito Live System)
-        if (selection == 6):
+    # NH Tails (The Amnesic Incognito Live System)
+        if selection == 6:
             os.system('clear')
-            if (raw_input('This will install NH configuration for Tails. \nAre you sure? Type uppercase YES: ') == 'YES'):
-                SetSerialPermissions('amnesia')
+            if raw_input('This will install NH configuration for Tails. \nAre you sure? Type uppercase YES: ') == 'YES':
+
                 get_NH_script()
+                SetSerialPermissions('amnesia')
+
                 os.system('clear')
                 print '\nNH install script completed. To launch NH, type below\n                   python NH.py'
                 exit()
@@ -463,74 +504,81 @@ while True:
 
 
 
-    #NH OpenSUSE
-        if (selection == 7):
+    # NH OpenSUSE
+        if selection == 7:
             os.system('clear')
-            if (raw_input('This will install NH configuration for OpenSUSE. \nAre you sure? Type uppercase YES: ') == 'YES'):
-                if (raw_input('\nType YES to install Pidgin with OTR: ') == 'YES'):
+            if raw_input('This will install NH configuration for OpenSUSE. \nAre you sure? Type uppercase YES: ') == 'YES':
+
+                if raw_input('\nType YES to install Pidgin with OTR: ') == 'YES':
                     zypper_Pidgin()
                     zypper_Pidgin_OTR()
+
                 zypper_Python_Qt4()
                 zypper_Python_Serial()
-                SetSerialPermissions(raw_input("Type name of the user that will be running TFC (this will add the user to dialout group): "))
                 get_NH_script()
-                
+
+                SetSerialPermissions(raw_input('Type name of the user that will be running TFC (this will add the user to dialout group): '))
+
                 os.system('clear')
-                print '\nNH install script completed\nRebooting system in 20 seconds. If you don\'t want to restart now, press CTRL+C'
+                print '\nNH install script completed\n'  \
+                      'Rebooting system in 20 seconds.\n'\
+                      'If you don\'t want to restart now, press CTRL+C\n'
                 try:
                     time.sleep(20)
                     reboot()
                 except KeyboardInterrupt:
-                    print "\n\nReboot aborted, exiting. (You may need to restart your NH for NH.py to work correctly)\n"
+                    print '\n\nReboot aborted, exiting. (You may need to ' \
+                          'restart your NH for NH.py to work correctly)\n'
                     exit()
             else:
                 continue
 
 
 
-    #NH Fedora
-        if (selection == 8):
+    # NH Fedora
+        if selection == 8:
             os.system('clear')
-            if (raw_input('This will install NH configuration for Fedora. \nAre you sure? Type uppercase YES: ') == 'YES'):
-                if (raw_input('\nType YES to install Pidgin with OTR: ') == 'YES'):
+            if raw_input('This will install NH configuration for Fedora. \nAre you sure? Type uppercase YES: ') == 'YES':
+
+                if raw_input('\nType YES to install Pidgin with OTR: ') == 'YES':
                     yum_Pidgin()
                     yum_Pidgin_OTR()
+
                 yum_Python_Qt4()
                 yum_Python_Serial()
                 yum_install_Wget()
-                SetSerialPermissions(raw_input("Type name of the user that will be running TFC (this will add the user to dialout group): "))
                 get_NH_script()
-                
+
+                SetSerialPermissions(raw_input('Type name of the user that will be running TFC (this will add the user to dialout group): '))
+
                 os.system('clear')
-                print '\nNH install script completed\nRebooting system in 20 seconds. If you don\'t want to restart now, press CTRL+C'
+                print '\nNH install script completed\n'  \
+                      'Rebooting system in 20 seconds.\n' \
+                      'If you don\'t want to restart now, press CTRL+C\n'
                 try:
                     time.sleep(20)
                     reboot()
                 except KeyboardInterrupt:
-                    print "\n\nReboot aborted, exiting. (You may need to restart your NH for NH.py to work correctly)\n"
+                    print '\n\nReboot aborted, exiting. (You may need to ' \
+                          'restart your NH for NH.py to work correctly)\n'
                     exit()
             else:
                 continue
 
 
 
-    #Insecure testing mode with standalone computers
-        if (selection == 9):
+    # Insecure testing mode with standalone computers.
+        if selection == 9:
             os.system('clear')
+
             printLocalTesterWarning()
-            if (raw_input('\nTO VERIFY THAT YOU UNDERSTAND RISKS,\nTYPE IN UPPERCASE \'INSECURE\': ') == 'INSECURE'):
+            if raw_input('\nTO VERIFY THAT YOU UNDERSTAND RISKS,\nTYPE IN UPPERCASE \'INSECURE\': ') == 'INSECURE':
+
                 os.system('clear')
-                if (raw_input('\nType YES to install Pidgin with OTR: ') == 'YES'):
+
+                if raw_input('\nType YES to install Pidgin with OTR: ') == 'YES':
                     install_Pidgin()
                     install_Pidgin_OTR()
-
-                # WARNING! THE FOLLOWING KEYGEN IS ONLY INTENDED FOR TESTING TFC FEAETURES WITH VARYING SIZE GROUPS.
-                # THIS KEYGEN GENERATES KEYFILES FOR N SIZED GROUPS. FOR EACH USER, ALL KEYS FOR EACH USER ARE 
-                # COPIED INTO FOLDER NAMES AFTER THEIR XMPP ACCOUNT. ALL USER HAS TO DO, IS COPY THE FILES
-                # IN THAT FOLDER TO SAME DIRECTORY WHERE THE KEYS OF USER ARE.
-
-                #Specify global keyfile size in megabytes              
-                megabytes = 2
 
                 install_Python_Serial()
                 install_Python_Qt4()
@@ -538,9 +586,17 @@ while True:
 
                 userArray = []
                 while True:
-                    print ''
-                    userC = raw_input('Enter XMPP account for user, or press Enter to create keys: ')
-                    if (userC == ''):
+
+                    os.system('clear')
+                    print 'Installing dependencies completed. The system will now ask you to enter '\
+                          'the XMPP-addresses that will be participating in testing, to generate '  \
+                          'local test folders for each user. If you have already received a local ' \
+                          'test folder, you can press enter to close the installer and open the '   \
+                          'Tx.py, Rx.py and NH.py in their own terminals. Remember to open pidgin ' \
+                          'before opening NH.py.\n\n'
+
+                    userC = raw_input('Enter XMPP account of user, or press Enter to create test folders:\n\n')
+                    if userC == '':
                         break
                     userArray.append(userC)
 
@@ -552,6 +608,7 @@ while True:
                     subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/Tx.py', shell=True).wait()
                     subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/Rx.py', shell=True).wait()
                     subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/NH.py', shell=True).wait()
+                    subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc-cev/master/tfcinstaller.py -O tfcOTPInstaller.py', shell=True).wait()
 
                     changeToLocal('Tx.py')
                     changeToLocal('Rx.py')
@@ -560,6 +617,7 @@ while True:
                     subprocess.Popen('mv Tx.py ' + user1 + '/', shell=True).wait()
                     subprocess.Popen('mv Rx.py ' + user1 + '/', shell=True).wait()
                     subprocess.Popen('mv NH.py ' + user1 + '/', shell=True).wait()
+                    subprocess.Popen('mv tfcOTPInstaller.py ' + user1 + '/', shell=True).wait()
 
                     subprocess.Popen('dd if=/dev/urandom of=tx.local.e bs=1M count=' + str(megabytes), shell=True).wait()
                     subprocess.Popen('cp tx.local.e rx.local.e', shell=True).wait()
@@ -569,9 +627,9 @@ while True:
                 print 'Done.'
 
                 for user1 in userArray:
-                    print 'Now creating keys for user: ' + user1
+                    print 'Creating keys for user: ' + user1
                     for user2 in userArray:
-                        if (user1 != user2):
+                        if user1 != user2:
                             subprocess.Popen('dd if=/dev/urandom of=tx.' + user1 + '.e bs=1M count=' + str(megabytes), shell=True).wait()
                             subprocess.Popen('cp tx.' + user1 + '.e ' + 'me.' + user1 + '.e', shell=True).wait()
                             subprocess.Popen('cp tx.' + user1 + '.e ' + 'rx.' + user2 + '.e', shell=True).wait()
@@ -583,8 +641,11 @@ while True:
                         continue
 
                 os.system('clear')
-                print "All files created succesfully.\n"
-                print "If you want to try TFC out with your friends,\nThe application with all necessary files is in folder respective to their XMPP-address.\n"
+                print 'Test folders named after each user generated succesfully. Before each user '      \
+                      'can run their test version of TFC, they must run the bundled tfcOTPInstaller.py ' \
+                      'and choose installation configuration 9. When the installer has installed '       \
+                      'dependencies, the user is ready to run the Tx.py, Rx.py and NH.py. Note '         \
+                      'that other users don\'t have to create their own keyfiles for insecure testing.\n\n'
                 exit()
             else:
                 continue
@@ -593,6 +654,5 @@ while True:
         continue
     except IndexError:
         continue
-
 
 
