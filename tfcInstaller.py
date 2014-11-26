@@ -256,7 +256,7 @@ def c_run_permissions():
 
 def printLocalTesterWarning():
     print '''
-WARNING YOU HAVE SELECTED THE LOCAL TESTING VERSION OF TFC!
+WARNING! YOU HAVE SELECTED THE LOCAL TESTING VERSION OF TFC!
 THIS VERSION IS INTENDED FOR TRYING OUT THE FEATURES AND STABILITY OF SYSTEM.
 AS IN THIS CONFIGURATION, THE ENCRYPTION KEYS ARE CREATED, STORED AND HANDLED
 ON NETWORK-CONNECTED COMPUTER, ANYONE WHO BREAKS IN TO YOUR COMPUTER BY
@@ -273,7 +273,7 @@ MESSAGES YOU SEND AND RECEIVE EFFORTLESSLY!
 while True:
     try:
         os.system('clear')
-        print 'TFC-CEV || ' + version + ' || tfcCEVinstaller.py'
+        print 'TFC || ' + version + ' || tfcInstaller.py'
         print '''
 Select configuration that matches your OS:
 
@@ -592,7 +592,7 @@ Select configuration that matches your OS:
                           'the XMPP-addresses that will be participating in testing, to generate '  \
                           'local test folders for each user. If you have already received a local ' \
                           'test folder, you can press enter to close the installer and open the '   \
-                          'Tx.py, Rx.py and NH.py in their own terminals. Remember to open pidgin ' \
+                          'Tx.py, Rx.py and NH.py in their own terminals. Remember to open Pidgin ' \
                           'before opening NH.py.\n\n'
 
                     userC = raw_input('Enter XMPP account of user, or press Enter to create test folders:\n\n')
@@ -608,7 +608,7 @@ Select configuration that matches your OS:
                     subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/Tx.py', shell=True).wait()
                     subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/Rx.py', shell=True).wait()
                     subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/NH.py', shell=True).wait()
-                    subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc-cev/master/tfcinstaller.py -O tfcOTPInstaller.py', shell=True).wait()
+                    subprocess.Popen('wget https://raw.githubusercontent.com/maqp/tfc/master/tfcInstaller.py -O tfcOTPInstaller.py', shell=True).wait()
 
                     changeToLocal('Tx.py')
                     changeToLocal('Rx.py')

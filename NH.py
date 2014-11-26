@@ -233,8 +233,8 @@ def networkTransmitter():
                     serialQueue.put(rcdPkg + '\n')
 
                     os.system('clear')
-                    #o    = DBus_MsgSender(xmpp)
-                    #o.clearHistory()
+                    o    = DBus_MsgSender(xmpp)
+                    o.clearHistory()
 
 
                 # Relay command to RxM.
@@ -273,8 +273,8 @@ def networkTransmitter():
                             print 'NetworkTransmitter: Wrote <mesg>me.' + xmpp + '~' + msgContent + '~' + crcPkg + ' to serial queue.\n'
 
                         serialQueue.put('<mesg>me.'                     + xmpp + '~' + msgContent[5:] + '~' + crcPkg + '\n')
-                        #o = DBus_MsgSender(xmpp)
-                        #o.sender()
+                        o = DBus_MsgSender(xmpp)
+                        o.sender()
 
                         packetTime = datetime.datetime.now().strftime(displayTimeFmt)
                         print packetTime + '  Sent message to        ' + xmpp

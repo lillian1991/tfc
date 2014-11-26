@@ -56,7 +56,7 @@ shredIterations    = 3
 keyThreshold       = 5
 PkgSize            = 140
 
-localTesting       = True
+localTesting       = False
 
 if not localTesting:
     port        = serial.Serial('/dev/ttyAMA0', baudrate=9600, timeout=0.1)
@@ -929,9 +929,9 @@ try:
                                     # Print message to user.
                                     if displayTime:
                                         msgTime = datetime.datetime.now().strftime(displayTimeFmt)
-                                        print msgTime + ' ' + nick + ':    ' + plaintext
+                                        print msgTime + '  ' + nick + ':  ' + plaintext
                                     else:
-                                        print                 nick + ':    ' + plaintext
+                                        print                  nick + ':  ' + plaintext
 
                                 # Log messages if logging is enabled.
                                 if logMessages:
