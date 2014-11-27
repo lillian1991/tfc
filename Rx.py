@@ -35,7 +35,7 @@ for more details. For a copy of the GNU General Public License, see
 
 
 ######################################################################
-#                           CONFIGURATION                            #
+#                            CONFIGURATION                           #
 ######################################################################
 
 fileSavingAllowed  = False
@@ -535,7 +535,7 @@ EXITING Tx.py'''
 
 
 ######################################################################
-#                         MSG PROCESSING                             #
+#                           MSG PROCESSING                           #
 ######################################################################
 
 def base64_decode(content):
@@ -975,7 +975,7 @@ try:
                                                     if os.path.isfile(fileName):
                                                         overwrite = raw_input('File already exists. Type \'YES\' to overwrite: ')
 
-                                                        if overwrite == 'YES':
+                                                        if overwrite   == 'YES':
                                                             askFileName = False
                                                         continue
 

@@ -153,9 +153,8 @@ class Keccak:
        [28,   55,    25,    21,    56]    ,
        [27,   20,    39,     8,    14]    ]
 
+
     ## Generic utility functions
-
-
 
     def rot(self,x,n):
         """Bitwise rotation (to the left) of n bits considering the \
@@ -268,10 +267,9 @@ class Keccak:
         output =''.join(output).upper()
         return output
 
+
+
     ### Padding function
-
-
-
     def pad(self,M, n):
         """Pad M with reverse-padding to reach a length multiple of n
 
@@ -1240,15 +1238,14 @@ def print_help():
             print   ' \'  \' (2x spacebar) '                                  + 'Emergency exit'
         else:
             print   ' /clear & \'  \''                             + 9  * ' ' + 'Clear screens'
+        print       ' /file <filename>'                            + 6  * ' ' + 'Send file to recipient'
         print       ' /help'                                       + 17 * ' ' + 'Display this list of commands'
         print       ' /logging <on/off>'                           + 5  * ' ' + 'Enable/disable logging on Rx.py'
-        print       ' /msg <ID/xmpp/group>'                        + 2  * ' ' + 'Change recipient (use with /names)'
+        print       ' /msg <ID/xmpp/group>'                        + 2  * ' ' + 'Change recipient'
         print       ' /names'                                      + 16 * ' ' + 'Displays available contacts'
         print       ' /paste'                                      + 16 * ' ' + 'Enable paste-mode'
-        print       ' /file <filename>'                            + 6  * ' ' + 'Send file to recipient'
         print       ' /nick <nick>'                                + 10 * ' ' + 'Change contact\'s nickname on Tx.py & Rx.py'
         print       ' /quit & /exit'                               + 9  * ' ' + 'Exits TFC'
-        print       ' shift + PgUp/PgDn'                           + 5  * ' ' + 'Scroll terminal up/down'
         print       ' /group'                                      + 16 * ' ' + 'List group members'
         print       ' /groups'                                     + 15 * ' ' + 'List available groups'
         print       ' /group <groupname>'                          + 4  * ' ' + 'Select group\n'
@@ -1687,7 +1684,6 @@ while True:
 
     # Create new group.
     if userInput.startswith('/group create '):
-
         userInput = ' '.join(userInput.split())
 
 
@@ -1900,7 +1896,7 @@ while True:
                         nick = get_nick(xmpp)
                         selectedGroup = ''
                         os.system('clear')
-                        print 'Now sending messages to ' + nick + ' (' + xmpp + ')\n'
+                        print 'Now sending messages to ' + nick + ' (' + xmpp[3:] + ')\n'
                         continue
 
             else:
@@ -1935,9 +1931,6 @@ while True:
 
     if userInput.startswith('/nick ') or userInput.startswith('/logging ') or userInput.startswith('/newkf '):
         command    = ''
-        cmdLogging = False
-        cmdNick    = False
-        cmdNewTxKF = False
 
         # Check that local keyfile exists.
         if not os.path.isfile('tx.local.e'):
@@ -1979,7 +1972,7 @@ while True:
 
             os.system('clear')
             print '\nChanged ' + xmpp[3:] + ' nick to ' + nick + '\n'
-            command  = 'rx.' + xmpp[3:] + '/nick=' + nick
+            command = 'rx.' + xmpp[3:] + '/nick=' + nick
 
 
         ###################
@@ -2114,8 +2107,6 @@ while True:
             print '\nFile sending aborted\n'
             time.sleep(0.4)
             continue
-
-        
 
     if userInput.startswith('/') and not userInput.startswith('/file '):
         os.system('clear')
