@@ -1690,9 +1690,9 @@ while True:
         # Create list of names group can not have.
         reservedNames = ['create', 'add', 'rm']
         for fileName in keyFileNames:
-            reservedNames.append( get_nick(fileName[:-2]) ) # Append nicknames.
-            reservedNames.append( fileName[:-2] )           # Append XMPP-file.
-            reservedNames.append( fileName[3:][:-2])        # Append XMPP-addr.
+            reservedNames.append(get_nick(fileName[:-2])) # Append nicknames.
+            reservedNames.append(fileName[:-2])           # Append XMPP-file.
+            reservedNames.append(fileName[3:][:-2])       # Append XMPP-addr.
 
 
         # Check that group name is not reserved.
