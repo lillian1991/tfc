@@ -2138,6 +2138,8 @@ while True:
             else:
                 short_msg_process(userInput, xmpp)
 
+        sleep(0.1)
+
         print ''
 
 
