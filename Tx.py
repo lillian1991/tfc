@@ -916,24 +916,23 @@ def get_terminal_width():
 
 
 
-def print_kf_status(xmpp, keyID, outputKeys=False):
+def print_kf_status(xmpp):
 
     keysLeft = count_remaining_keys(xmpp)
 
     if debugging:
         if xmpp == 'tx.local':
-            print '\nM(print_kf_status): ' + str(msgLeft - 1) + ' command(s) remaining\n'
+            print '\nM(print_kf_status): ' + str(keysLeft) + ' command(s) remaining\n'
         else:
-            print '\nM(print_kf_status): ' + str(msgLeft - 1) + ' messages(s) remaining\n'
-
+            print '\nM(print_kf_status): '+ xmpp[3:] + ': ' + str(keysLeft) + ' messages(s) remaining\n'
 
     notifyList = [100, 50, 40, 30, 20, 10, 5, 4, 3, 2, 1]
-    if outputKeys:
-        if keysLeft in notifyList:
-            if xmpp == 'tx.local':
-                print 'Commands remaining: ' + str(msgLeft - 1)
-            else:
-                print 'Messages remaining: ' + str(msgLeft - 1)
+
+    if keysLeft in notifyList:
+        if xmpp == 'tx.local':
+            print 'Commands remaining: ' + str(keysLeft)
+        else:
+            print xmpp[3:] + ': Messages remaining: ' + str(keysLeft)
 
 
 
@@ -1103,6 +1102,8 @@ def long_msg_process(userInput, xmpp):
                 sleepTime = random.uniform(0, maxSleepTime)
                 print 'Sleeping ' + str(sleepTime) + ' seconds to obfuscate long message.'
                 sleep(sleepTime)
+
+            print_kf_status(xmpp)
 
             # Minimum sleep time ensures XMPP server is not flooded.
             sleep(lMsgSleep)
@@ -2137,9 +2138,9 @@ while True:
 
             else:
                 short_msg_process(userInput, xmpp)
+                print_kf_status(xmpp)
 
         sleep(0.1)
-
         print ''
 
 
@@ -2154,5 +2155,5 @@ while True:
 
         else:
             short_msg_process(userInput, xmpp)
-
+            print_kf_status(xmpp)
 
