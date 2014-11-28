@@ -1225,7 +1225,7 @@ def print_help():
         print '/group create <groupname> <xmpp1> <xmpp2>\nCreate new group'   + le
         print '/group add <groupname> <xmpp1> <xmpp2>\nAdd xmpp to group'     + le
         print '/group rm <groupname> <xmpp1> <xmpp2>\nRemove xmpp from group' + le
-        print '/shift + PgUp/PgDn\nScroll terminal up/dn'                       + le
+        print '/shift + PgUp/PgDn\nScroll terminal up/dn'                     + le
         print '/newkf tx <contactXMPP> 1.kf\nChange keyfile for sending'      + le
         print '/newkf rx <contactXMPP> 1.kf\nChange keyfile for receiving'    + le
         print ''
