@@ -1,7 +1,7 @@
 Project Description:
 --------------------
 
-Tinfoil Chat (TFC) is a high assurance encryption plugin for Pidgin IM client that combines free and open source hardware and software. Secure by design implementation provides a no-compromise layer over the standard and OTR encrypted communication, that addresses automatable attacks used by intelligence agencies for mass surveillance:
+Tinfoil Chat (TFC) is a high assurance encryption plugin for Pidgin IM client that combines free and open source hardware and software. Secure by design implementation provides a no-compromise layer that addresses automatable attacks used by intelligence agencies for mass surveillance:
 
 1. Information theoretically secure encryption and authentication guarantee privacy and integrity of communication.
 
